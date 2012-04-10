@@ -14,6 +14,12 @@ for both Mac and Linux. You could use *a2ps* or even *lpr* instead, with
 suitable options. Windows users are left out at the moment, though I know
 you can do similar things there.
 
+## Configuration
+
+Add whatever options you need in the settings file. Note that options without
+a value (i.e. `--option`) need to be specified with an empty string as value,
+due to the JSON dictionary format.
+
 ## External commands
 
 * The documentation for *enscript* is, for instance,
