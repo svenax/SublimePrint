@@ -1,0 +1,48 @@
+[
+    {
+        "id": "file",
+        "children":
+        [
+            {
+                "caption": "-"
+            },
+            {
+                "caption": "Print Current View",
+                "command": "print"
+            }
+        ]
+    },
+    {
+        "id": "preferences",
+        "children":
+        [
+            {
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "SublimePrint",
+                        "children":
+                        [
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/SublimePrint/SublimePrint.sublime-settings"
+                                },
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/SublimePrint.sublime-settings"
+                                },
+                                "caption": "Settings – User"
+                            },
+                            { "caption": "-" }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
