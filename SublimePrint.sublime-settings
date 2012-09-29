@@ -1,5 +1,6 @@
 {
     "command": "enscript",
+    "used_printer": "DEFAULT",
     "options":
     {
         "fancy-header": "",

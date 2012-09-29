@@ -1,6 +1,6 @@
 # Super simple print function for Sublime Text 2
 
-There's a lot of requests for printing in the discussion foras for
+There's a lot of requests for printing in the discussion forum for
 Sublime Text. Personally, I very rarely need printing, but I can appreciate
 that some do.
 
@@ -20,15 +20,32 @@ Add whatever options you need in the settings file. Note that options without
 a value (i.e. `--option`) need to be specified with an empty string as value,
 due to the JSON dictionary format.
 
+The given print command will be searched inside path '/usr/bin' and 
+'/usr/local/bin'. An absolute path should be given if it resides in another
+directory.
+
+## Select a printer
+
+A list of all available printers will be created in the user specific 'SublimePrint.sublime-settings' file. 
+The available printers have key format "printer_?". The selected printer is defined under key "used_printer".
+
+To re-create the list of available printers, delete all keys "used_printer" and "printer_?" from the user specific 
+'SublimePrint.sublime-settings' and print an empty page.
+
 ## Install enscript
 
 Check whether enscript is installed already:
 
 $ which enscript
 
+If SublimePrint does not print, edit the user settings and change the "command" 
+value to the absolute path shown by the *which* command. In most cases, this is 
+not needed. 
+
 ### Linux
 
-Enscript is not installed on some Linux distributions even when CUPS was installed.
+Given CUPS is already installed and you can successful print from other programs 
+but *enscript* can not be found:
 
 [Debian based]$ sudo apt-get install enscript
 
