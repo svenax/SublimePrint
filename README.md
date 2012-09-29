@@ -20,6 +20,23 @@ Add whatever options you need in the settings file. Note that options without
 a value (i.e. `--option`) need to be specified with an empty string as value,
 due to the JSON dictionary format.
 
+## Install enscript
+
+Check whether enscript is installed already:
+
+$ which enscript
+
+### Linux
+
+Enscript is not installed on some Linux distributions even when CUPS was installed.
+
+[Debian based]$ sudo apt-get install enscript 
+[RedHat based]$ sudo yum install enscript 
+
+### Mac OS
+
+[Homebrew]$ brew install enscript
+
 ## External commands
 
 * The documentation for *enscript* is, for instance,
