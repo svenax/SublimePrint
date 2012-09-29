@@ -45,8 +45,10 @@ class PrintCommand(sublime_plugin.WindowCommand):
             # Example:
             # $ lpstat -d
             # System-Standardzielort: Samsung_CLP_310_Series__SAMSUNG_CLP310N_
+            # $ lpstat -d
+            # system default destination: Cups-PDF
             if not ret:
-                defaultPrinter = p.stdout.read().split()[1]
+                defaultPrinter = p.stdout.read().split(":")[1].strip()
                 settings.set("used_printer",defaultPrinter)
                 sublime.save_settings('SublimePrint.sublime-settings')
             # get all printers
@@ -55,6 +57,11 @@ class PrintCommand(sublime_plugin.WindowCommand):
             # Example:
             # $ lpstat -a
             # Samsung_CLP_310_Series__SAMSUNG_CLP310N_ akzeptiert Anfragen seit Sa 29 Sep 23:41:57 2012
+            # $ lpstat -a
+            # Cups-PDF accepting requests since Sun 30 Sep 2012 01:14:33 AM CEST
+            # DEMUC001 accepting requests since Wed 05 Sep 2012 06:28:30 PM CEST
+            # HP_Color_LaserJet_4700 accepting requests since Fri 28 Sep 2012 01:24:25 PM CEST
+            # SamsungCLP310 accepting requests since Sun 30 Sep 2012 01:16:19 AM CEST
             if not ret:
                 printerCount = 0
                 for line in p.stdout:
