@@ -30,7 +30,8 @@ $ which enscript
 
 Enscript is not installed on some Linux distributions even when CUPS was installed.
 
-[Debian based]$ sudo apt-get install enscript 
+[Debian based]$ sudo apt-get install enscript
+
 [RedHat based]$ sudo yum install enscript 
 
 ### Mac OS
