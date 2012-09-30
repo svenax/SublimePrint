@@ -8,7 +8,7 @@
             },
             { "caption": "Print Entire File", "command": "print_file" },
             { "caption": "Print Clipboard", "command": "print_clipboard" },
-            { "caption": "Print Selection", "command": "print_file" }
+            { "caption": "Print Selection", "command": "print_selection" }
         ]
     },
     {

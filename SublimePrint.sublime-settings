@@ -1,6 +1,7 @@
 {
     "command": "enscript",
     "used_printer": "DEFAULT",
+    "print_file_name_and_line_numbers_for_selection": 1,
     "options":
     {
         "fancy-header": "",

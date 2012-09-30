@@ -26,16 +26,18 @@ directory.
 ### Supported print options
 
 * Print the entire file from the active view.
-* Print the selected text from the active view.
+* Print the selected text from the active view. 
+Multiple selections are supported.
 * Print the content of the clipboard.
 
 ### Select a printer
 
-A list of all available printers will be created in the user specific 'SublimePrint.sublime-settings' file. 
-The available printers have key format "printer_(a number)". The selected printer is defined under key "used_printer".
+A list of all available printers will be created in the user specific 'SublimePrint.sublime-settings' file at the first 
+time something is printed. The available printers have key format "printer_(a number)". The selected printer is defined 
+under key "used_printer". The value of "used_printer" defaults to the default printer.
 
 To re-create the list of available printers, delete key "used_printer" and all occurrences of "printer_(a number)" from 
-the user specific 'SublimePrint.sublime-settings' and print an empty page.
+the user specific 'SublimePrint.sublime-settings' and print a small text.
 
 ## Install enscript
 
@@ -62,11 +64,10 @@ but *enscript* can not be found:
 
 ## Known limitations
 
-* Only saved documents can be printed.
-* If a changed document was not saved before, the old version is printed.
+* Only saved documents can be printed as 'Print Entire File'. The workaround for
+unsaved or modified files is to select all and print it as selection. 
 * no preview
-* no printing of selections or special side numbers
-* no colored syntax highlighting
+* no syntax highlighting
 
 ## External commands
 
