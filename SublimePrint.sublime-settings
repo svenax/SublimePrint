@@ -1,14 +1,32 @@
-{
+{   
+    // the binary to be used for printing
     "command": "enscript",
+    // the printer name
     "used_printer": "DEFAULT",
+    // file name and selected line numbers can be printed when printing a selection
     "print_file_name_and_line_numbers_for_selection": 1,
+
+    // direct command line options of 'enscript'
     "options":
     {
+        // - this setting is ignored for clipboard and selection printing
+        // * clipboard - not needed
+        // * selection - see parameter print_file_name_and_line_numbers_for_selection
+        "line-numbers": 1,
+        
+        // - common media types:
+        "media": "A4",
+        //"media": "Letter",
+        
+        // - like to print in Landscape mode?
+        //"landscape": "",
+
+        // See: 'enscript --help-highlight' for possible values for language highlighting
+        "highlight": "",
+        
+        // other settings
         "fancy-header": "",
         "font": "Courier@8",
-        "highlight": "",
-        "line-numbers": 1,
-        "media": "A4",
         "tabsize": 4
     }
 }

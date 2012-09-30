@@ -67,7 +67,6 @@ but *enscript* can not be found:
 * Only saved documents can be printed as 'Print Entire File'. The workaround for
 unsaved or modified files is to select all and print it as selection. 
 * no preview
-* no syntax highlighting
 
 ## External commands
 
