@@ -65,7 +65,7 @@ but *enscript* can not be found:
 ## Known limitations
 
 * Only saved documents can be printed via menu 'Print Entire File'. The workaround for
-unsaved or modified files is to select all lines and use 'Print Selection' as selection. 
+unsaved or modified files is to select all lines and use 'Print Selection'. 
 * no preview
 * printing on Windows not yet implemented
 
