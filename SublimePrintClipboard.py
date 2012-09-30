@@ -23,6 +23,10 @@ class PrintClipboardCommand(sublime_plugin.WindowCommand):
             # and save in user settings for the next time
             settings.set("command",printcommand)
             sublime.save_settings('SublimePrint.sublime-settings')
+        else:
+            if not isfile(printcommand):
+                sublime.error_message("Program '"+ printcommand +"' not found! Please review documentation.")
+                return
 
         # additional options but ignore "line-numbers" because this is from clipboard
         options = ["--%s=%s" % (k, v) for k, v in settings.get("options").iteritems() if v != "" and k != "line-numbers"]
