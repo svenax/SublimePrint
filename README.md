@@ -28,7 +28,7 @@ directory.
 * Print the entire file from the active view.
 * Print the selected text from the active view. 
 Multiple selections are supported.
-* Print the content of the clipboard.
+* Print clipboard content.
 
 ### Select a printer
 
@@ -64,9 +64,10 @@ but *enscript* can not be found:
 
 ## Known limitations
 
-* Only saved documents can be printed as 'Print Entire File'. The workaround for
-unsaved or modified files is to select all and print it as selection. 
+* Only saved documents can be printed via menu 'Print Entire File'. The workaround for
+unsaved or modified files is to select all lines and use 'Print Selection' as selection. 
 * no preview
+* printing on Windows not yet implemented
 
 ## External commands
 
