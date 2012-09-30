@@ -5,14 +5,11 @@ from os.path import split
 from os.path import isabs
 from os.path import isfile
 
-class PrintCommand(sublime_plugin.WindowCommand):
+class PrintClipboardCommand(sublime_plugin.WindowCommand):
     def run(self):
-        file_path = self.window.active_view().file_name()
-        if not file_path:
-            sublime.error_message("No file to print.")
-            return
+        clipboardText = sublime.get_clipboard()
 
-        file_dir, file_name = split(file_path)
+        # load settings
         settings = sublime.load_settings('SublimePrint.sublime-settings')
 
         # check where the print command has an absolute path
@@ -27,8 +24,8 @@ class PrintCommand(sublime_plugin.WindowCommand):
             settings.set("command",printcommand)
             sublime.save_settings('SublimePrint.sublime-settings')
 
-        # additional options
-        options = ["--%s=%s" % (k, v) for k, v in settings.get("options").iteritems() if v != ""]
+        # additional options but ignore "line-numbers" because this is from clipboard
+        options = ["--%s=%s" % (k, v) for k, v in settings.get("options").iteritems() if v != "" and k != "line-numbers"]
         options += ["--%s" % k for k, v in settings.get("options").iteritems() if v == ""]
 
         # create printer list in user settings if not defined
@@ -74,9 +71,10 @@ class PrintCommand(sublime_plugin.WindowCommand):
             options += ["-P", printer]
 
         # print
-        cmd = [printcommand] + options + [file_name]
+        cmd = [printcommand] + options
 
-        p = subprocess.Popen(cmd, cwd=file_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p.communicate(clipboardText)
         ret = p.wait()
 
         if ret:

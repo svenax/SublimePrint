@@ -5,8 +5,7 @@ Sublime Text. Personally, I very rarely need printing, but I can appreciate
 that some do.
 
 So here's a really simple solution to the problem. Nothing more than sending
-the file attached to the current view to an external program that does the
-printing.
+the data to an external program that does the printing.
 
 The program used, and various options are selected in the settings file.
 As default, I use *enscript* since that is available in a standard install
@@ -24,13 +23,19 @@ The given print command will be searched inside path '/usr/bin' and
 '/usr/local/bin'. An absolute path should be given if it resides in another
 directory.
 
-## Select a printer
+### Supported print options
+
+* Print the entire file from the active view.
+* Print the selected text from the active view.
+* Print the content of the clipboard.
+
+### Select a printer
 
 A list of all available printers will be created in the user specific 'SublimePrint.sublime-settings' file. 
-The available printers have key format "printer_?". The selected printer is defined under key "used_printer".
+The available printers have key format "printer_(a number)". The selected printer is defined under key "used_printer".
 
-To re-create the list of available printers, delete all keys "used_printer" and "printer_?" from the user specific 
-'SublimePrint.sublime-settings' and print an empty page.
+To re-create the list of available printers, delete key "used_printer" and all occurrences of "printer_(a number)" from 
+the user specific 'SublimePrint.sublime-settings' and print an empty page.
 
 ## Install enscript
 
@@ -54,6 +59,14 @@ but *enscript* can not be found:
 ### Mac OS
 
 [Homebrew]$ brew install enscript
+
+## Known limitations
+
+* Only saved documents can be printed.
+* If a changed document was not saved before, the old version is printed.
+* no preview
+* no printing of selections or special side numbers
+* no colored syntax highlighting
 
 ## External commands
 
