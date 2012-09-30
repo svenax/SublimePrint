@@ -11,7 +11,7 @@ class PrintFileCommand(sublime_plugin.WindowCommand):
         if not file_path:
             sublime.error_message("No file to print.")
             return
-        elif self.window.active_view().is_dirty()
+        elif self.window.active_view().is_dirty():
             sublime.error_message("Current modifications had not been saved.")
             return
 
