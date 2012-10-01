@@ -6,10 +6,9 @@
             {
                 "caption": "-"
             },
-            {
-                "caption": "Print Current View",
-                "command": "print"
-            }
+            { "caption": "Print Entire File", "command": "print_file" },
+            { "caption": "Print Clipboard", "command": "print_clipboard" },
+            { "caption": "Print Selection", "command": "print_selection" }
         ]
     },
     {
