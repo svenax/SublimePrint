@@ -44,7 +44,9 @@ the user specific 'SublimePrint.sublime-settings' and print a small text.
 * Download [SublimePrint](https://github.com/freeella/SublimePrint.sublime-package/raw/master/SublimePrint.sublime-package)
 
 * Place it inside the 'Installed Packages' directory.
+
 [Linux]$ cp SublimePrint.sublime-package ~/.config/sublime-text-2/Installed\ Packages/
+
 [OS X]$ cp SublimePrint.sublime-package ~/Library/Application\ Support/Sublime\ Text\ 2/Installed\ Packages/
 
 * Restart Sublime
