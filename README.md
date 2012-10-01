@@ -39,6 +39,17 @@ under key "used_printer". The value of "used_printer" defaults to the default pr
 To re-create the list of available printers, delete key "used_printer" and all occurrences of "printer_(a number)" from 
 the user specific 'SublimePrint.sublime-settings' and print a small text.
 
+## Install SublimePrint
+
+* Download [SublimePrint](https://github.com/freeella/SublimePrint.sublime-package/raw/master/SublimePrint.sublime-package)
+
+* Place it inside the 'Installed Packages' directory.
+[Linux]$ cp SublimePrint.sublime-package ~/.config/sublime-text-2/Installed\ Packages/
+[OS X]$ cp SublimePrint.sublime-package ~/Library/Application\ Support/Sublime\ Text\ 2/Installed\ Packages/
+
+* Restart Sublime
+
+
 ## Install enscript
 
 Check whether enscript is installed already:
@@ -58,7 +69,7 @@ but *enscript* can not be found:
 
 [RedHat based]$ sudo yum install enscript 
 
-### Mac OS
+### OS X
 
 [Homebrew]$ brew install enscript
 
@@ -67,7 +78,9 @@ but *enscript* can not be found:
 * Only saved documents can be printed via menu 'Print Entire File'. The workaround for
 unsaved or modified files is to select all lines and use 'Print Selection'. 
 * no preview
-* printing on Windows not yet implemented
+* printer selection via properties file only
+* Windows not yet implemented
+* Sublime Package manager not yet implemented
 
 ## External commands
 
