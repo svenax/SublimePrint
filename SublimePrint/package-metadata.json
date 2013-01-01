@@ -1,0 +1,5 @@
+{
+    "url": "https://github.com/freeella/SublimePrint.sublime-package/SublimePrint",
+    "version": "2012.10.01.11.00.00",
+    "description": "Send the file of the current view to an external command for printing"
+}
