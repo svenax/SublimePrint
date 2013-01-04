@@ -8,9 +8,8 @@ to an external program that does the printing.
 
 The program used, and various options are selected in the settings file.
 As default, I use `enscript` since that is available in a standard install
-for both Mac and Linux. You could use `a2ps` or even `lpr` instead, with
-suitable options. Windows users are left out at the moment, though I know
-you can do similar things there.
+for both Linux, Mac and possiby Windows. You could use `a2ps` or even `lpr`
+instead, with suitable options.
 
 **Note:** The code in `SublimePrint.py` actually depends on enscript a bit
 at the moment. I may clean that up in case there are requests for it.
@@ -67,6 +66,12 @@ but *enscript* can not be found:
 
     [Homebrew]$ brew install enscript
 
+### Windows
+
+Enscript is available for Windows from several providers, for instance
+[this one](http://gnuwin32.sourceforge.net/packages/enscript.htm). I have
+not verified that this works, though. If someone wants to try, please do so.
+
 ## Known limitations
 
 * Only saved documents can be printed with 'Print Entire File'.
@@ -74,7 +79,6 @@ but *enscript* can not be found:
   'Print Selection'.
 * No preview or print dialog.
 * Printer selection via properties file only.
-* Windows support not yet implemented.
 
 ## External commands
 
