@@ -1,0 +1,22 @@
+Thank you for installing SublimePrint! Here are some quick notes to get you
+started. Please see https://github.com/svenax/SublimePrint for the full
+documentation.
+
+First make sure you have enscript installed. For most Linux distros and for
+OS X before 10.8 this is done by default. There are builds for Windows too,
+but I'm not sure how well those work.
+
+The plugin provides three different print commands:
+1. Print Entire File. Only works for saved files.
+2. Print Selection. Works correctly with multiple selections.
+3. Print Clipboard.
+
+All configuration is done using Json settings files, accessible from
+Preferences > Package Settings > SublimePrint. The first time you use
+one of the print commands, a list of your installed printers is created
+in the User settings file, together with information on what printer to
+use. Initially that is your default printer, but you can change that if
+you want.
+
+If you have any comments or ideas, don't hesitate to contact me at
+sven@axelsson.name. Happy printing!

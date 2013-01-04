@@ -24,6 +24,14 @@
                             {
                                 "command": "open_file", "args":
                                 {
+                                    "file": "${packages}/SublimePrint/README.md"
+                                },
+                                "caption": "README"
+                            },
+                            { "caption": "-" },
+                            {
+                                "command": "open_file", "args":
+                                {
                                     "file": "${packages}/SublimePrint/SublimePrint.sublime-settings"
                                 },
                                 "caption": "Settings – Default"
