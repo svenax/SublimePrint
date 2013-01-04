@@ -1,16 +1,19 @@
-# Super simple print function for Sublime Text 2
+# Simple print function for Sublime Text 2
 
-There's a lot of requests for printing in the Sublime Text discussion forum.
+There are lots of requests for printing in the Sublime Text discussion forum.
 Personally, I very rarely need printing, but I can appreciate that some do.
 
-So here's a really simple solution to the problem. Nothing more than sending
-the data to an external program that does the printing.
+So here's a simple solution to the problem. Nothing more than sending the data
+to an external program that does the printing.
 
 The program used, and various options are selected in the settings file.
-As default, I use *enscript* since that is available in a standard install
-for both Mac and Linux. You could use *a2ps* or even *lpr* instead, with
+As default, I use `enscript` since that is available in a standard install
+for both Mac and Linux. You could use `a2ps` or even `lpr` instead, with
 suitable options. Windows users are left out at the moment, though I know
 you can do similar things there.
+
+**Note:** The code in `SublimePrint.py` actually depends on enscript a bit
+at the moment. I may clean that up in case there are requests for it.
 
 ## Configuration
 
@@ -18,14 +21,14 @@ Add whatever options you need in the settings file. Note that options without
 a value (i.e. `--option`) need to be specified with an empty string as value,
 due to the JSON dictionary format.
 
-The given print command will be searched inside path '/usr/bin' and
-'/usr/local/bin'. An absolute path should be given if it resides in another
+The given print command will be searched for inside path `/usr/bin` and
+`/usr/local/bin`. An absolute path should be given if it resides in another
 directory.
 
 ### Supported print options
 
-* Print the entire file from the active view.
-* Print the selected text from the active view.
+* Print the entire file of the active view.
+* Print the selected text of the active view.
   Multiple selections are supported.
 * Print clipboard content.
 
@@ -56,9 +59,9 @@ not needed.
 Given CUPS is already installed and you can successful print from other programs
 but *enscript* can not be found:
 
-    [Debian based]$ sudo apt-get install enscript
+    [Debian]$ sudo apt-get install enscript
 
-    [RedHat based]$ sudo yum install enscript
+    [RedHat]$ sudo yum install enscript
 
 ### OS X
 
@@ -66,15 +69,28 @@ but *enscript* can not be found:
 
 ## Known limitations
 
-* Only saved documents can be printed via menu 'Print Entire File'.
+* Only saved documents can be printed with 'Print Entire File'.
   The workaround for unsaved or modified files is to select all lines and use
   'Print Selection'.
-* No preview.
+* No preview or print dialog.
 * Printer selection via properties file only.
-* Windows not yet implemented.
+* Windows support not yet implemented.
 
 ## External commands
 
 * The documentation for *enscript* is, for instance,
   [here](http://linux.die.net/man/1/enscript)
 * Other processors you'll have to find yourself.
+
+## History
+
+10 Apr 2012
+: First version. Only supports 'Print Entire File'.
+
+1 Oct 2012
+: Many additions by Kai Ellinger, including 'Print Selection',
+  'Print Clipboard', and printer setup.
+
+4 Jan 2013
+: Total rewrite of code to elliminate duplication and to
+  simplify things. Submitted to Package Control.
