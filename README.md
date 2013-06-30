@@ -102,3 +102,6 @@ not verified that this works, though. If someone wants to try, please do so.
 29 Jun 2013
 : Some tweaks to make the code compatible with Python 3, and thus
   with Sublime Text 3.
+
+30 Jun 2013
+: Don't call `sys.exit()`, since that makes Sublime Text hang.

@@ -2,7 +2,6 @@ import sublime
 import sublime_plugin
 import os
 import subprocess
-import sys
 
 
 def load_settings():
@@ -47,9 +46,8 @@ class SublimePrint(sublime_plugin.WindowCommand):
 
         if cmd_path is None:
             sublime.error_message("Command '" + cmd + "' not found! Please review the documentation.")
-            sys.exit()
-        else:
-            return cmd_path
+
+        return cmd_path
 
     def get_printer(self):
         '''
@@ -61,6 +59,7 @@ class SublimePrint(sublime_plugin.WindowCommand):
         used_printer = settings.get("used_printer", None)
         if used_printer is None:
             lpstat_cmd = self.find_command("lpstat")
+            if lpstat_cmd is None: return None
             # Get default printer
             p = open_pipe([lpstat_cmd, "-d"])
             if p.wait() == 0:
@@ -76,7 +75,7 @@ class SublimePrint(sublime_plugin.WindowCommand):
                 printer_cnt = 0
                 for line in p.stdout:
                     printer_cnt += 1
-                    printer_name = "printer_%d" % printer_cnt
+                    printer_name = "printer_{}".format(printer_cnt)
                     settings.set(printer_name, line.split()[0])
             # Save the updated printer information
             save_settings()
@@ -88,6 +87,8 @@ class SublimePrint(sublime_plugin.WindowCommand):
         Return the array of command line options to pass to the subprocess.
         '''
         settings = load_settings()
+        print_cmd = self.find_command(settings.get("command"))
+        if print_cmd is None: return None
         options = settings.get("options")
         title_option = settings.get("title_option")
         if title_option and title:
@@ -95,14 +96,14 @@ class SublimePrint(sublime_plugin.WindowCommand):
         if not (print_line_numbers and settings.get("print_line_numbers")):
             options.pop("line-numbers")
 
-        options_list = ["--%s=%s" % (k, v) for k, v in options.items() if v != ""]
-        options_list += ["--%s" % k for k, v in options.items() if v == ""]
+        options_list = ["--{}={}".format(k, v) for k, v in options.items() if v != ""]
+        options_list += ["--{}".format(k) for k, v in options.items() if v == ""]
 
         printer = self.get_printer()
         if printer is not None:
-            options_list.append("--printer=%s" % printer)
+            options_list.append("--printer={}".format(printer))
 
-        return [self.find_command(settings.get("command"))] + options_list
+        return [print_cmd] + options_list
 
     def send_file_to_printer(self, cmd, file_path):
         file_dir, file_name = os.path.split(file_path)
@@ -137,7 +138,8 @@ class PrintFileCommand(SublimePrint):
             return
 
         cmd = self.printer_command()
-        self.send_file_to_printer(cmd, file_path)
+        if cmd is not None:
+            self.send_file_to_printer(cmd, file_path)
 
 
 class PrintSelectionCommand(SublimePrint):
@@ -164,7 +166,8 @@ class PrintSelectionCommand(SublimePrint):
         text = "----------\n".join(text_parts)
 
         cmd = self.printer_command(title, False)
-        self.send_text_to_printer(cmd, text)
+        if cmd is not None:
+            self.send_text_to_printer(cmd, text)
 
 
 class PrintClipboardCommand(SublimePrint):
@@ -173,7 +176,8 @@ class PrintClipboardCommand(SublimePrint):
     '''
     def run(self):
         cmd = self.printer_command("* Clipboard *", False)
-        self.send_text_to_printer(cmd, sublime.get_clipboard())
+        if cmd is not None:
+            self.send_text_to_printer(cmd, sublime.get_clipboard())
 
     def is_enabled(self):
         return sublime.get_clipboard() != ""
