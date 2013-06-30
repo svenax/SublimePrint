@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 import os
 import subprocess
+import sys
 
 
 def load_settings():
@@ -9,6 +10,9 @@ def load_settings():
 
 def save_settings():
     sublime.save_settings("SublimePrint.sublime-settings")
+
+def open_pipe(cmd, cwd=None, stdin=None):
+    return subprocess.Popen(cmd, cwd=cwd, stdin=stdin, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
 
 class SublimePrint(sublime_plugin.WindowCommand):
@@ -37,13 +41,13 @@ class SublimePrint(sublime_plugin.WindowCommand):
             cmd_path = None
         else:
             try:
-                cmd_path = filter(os.path.isfile, [os.path.join(p, cmd) for p in self.BIN_PATHS])[0]
+                cmd_path = list(filter(os.path.isfile, [os.path.join(p, cmd) for p in self.BIN_PATHS]))[0]
             except:
                 cmd_path = None
 
         if cmd_path is None:
-            sublime.error_message("Command '" + cmd + "' not found! Please review documentation.")
-            exit()
+            sublime.error_message("Command '" + cmd + "' not found! Please review the documentation.")
+            sys.exit()
         else:
             return cmd_path
 
@@ -58,7 +62,7 @@ class SublimePrint(sublime_plugin.WindowCommand):
         if used_printer is None:
             lpstat_cmd = self.find_command("lpstat")
             # Get default printer
-            p = subprocess.Popen([lpstat_cmd, "-d"], stdout=subprocess.PIPE)
+            p = open_pipe([lpstat_cmd, "-d"])
             if p.wait() == 0:
                 try:
                     used_printer = p.stdout.read().split(":")[1].strip()
@@ -67,7 +71,7 @@ class SublimePrint(sublime_plugin.WindowCommand):
                     # No default printer set
                     pass
             # Get all printers
-            p = subprocess.Popen([lpstat_cmd, "-a"], stdout=subprocess.PIPE)
+            p = open_pipe([lpstat_cmd, "-a"])
             if p.wait() == 0:
                 printer_cnt = 0
                 for line in p.stdout:
@@ -90,8 +94,9 @@ class SublimePrint(sublime_plugin.WindowCommand):
             options[title_option] = title
         if not (print_line_numbers and settings.get("print_line_numbers")):
             options.pop("line-numbers")
-        options_list = ["--%s=%s" % (k, v) for k, v in options.iteritems() if v != ""]
-        options_list += ["--%s" % k for k, v in options.iteritems() if v == ""]
+
+        options_list = ["--%s=%s" % (k, v) for k, v in options.items() if v != ""]
+        options_list += ["--%s" % k for k, v in options.items() if v == ""]
 
         printer = self.get_printer()
         if printer is not None:
@@ -102,14 +107,14 @@ class SublimePrint(sublime_plugin.WindowCommand):
     def send_file_to_printer(self, cmd, file_path):
         file_dir, file_name = os.path.split(file_path)
         cmd.append(file_name)
-        p = subprocess.Popen(cmd, cwd=file_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = open_pipe(cmd, cwd=file_dir)
         ret = p.wait()
 
         if ret:
             raise EnvironmentError((cmd, ret, p.stdout.read()))
 
     def send_text_to_printer(self, cmd, text):
-        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = open_pipe(cmd, stdin=subprocess.PIPE)
         p.communicate(text)
         ret = p.wait()
 
