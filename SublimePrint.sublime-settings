@@ -8,6 +8,9 @@
     // Should line numbers be printed?
     "print_line_numbers": true,
 
+    // Cache printer names and default
+    "cache_printer_names": true,
+
     // Direct command line options for 'enscript'
     "options":
     {

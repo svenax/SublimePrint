@@ -57,7 +57,8 @@ class SublimePrint(sublime_plugin.WindowCommand):
         # Create printer list in user settings if not defined
         settings = load_settings()
         used_printer = settings.get("used_printer", None)
-        if used_printer is None:
+        cache_printer_names = settings.get("cache_printer_names", True)
+        if used_printer is None or not cache_printer_names:
             lpstat_cmd = self.find_command("lpstat")
             if lpstat_cmd is None: return None
             # Get default printer

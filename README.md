@@ -43,6 +43,10 @@ To re-create the list of available printers, delete key *used_printer* and all
 occurrences of *printer_(a number)* from the user specific
 *SublimePrint.sublime-settings* and print some short text.
 
+If you instead always want to print on the default printer, you can set
+*cache_printer_names* to false in the user configuration file. Doing that will
+cause the printer list to always be generated.
+
 ## Install enscript
 
 Check whether enscript is installed already:
@@ -105,3 +109,7 @@ not verified that this works, though. If someone wants to try, please do so.
 
 30 Jun 2013
 : Don't call `sys.exit()`, since that makes Sublime Text hang.
+
+15 Jul 2013
+: Added *cache_printer_names* setting for those who always want to use
+  the default printer.
