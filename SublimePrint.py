@@ -76,7 +76,7 @@ class SublimePrint(sublime_plugin.WindowCommand):
                 printer_cnt = 0
                 for line in p.stdout:
                     printer_cnt += 1
-                    printer_name = "printer_{}".format(printer_cnt)
+                    printer_name = "printer_{0}".format(printer_cnt)
                     settings.set(printer_name, line.split()[0])
             # Save the updated printer information
             save_settings()
@@ -97,12 +97,12 @@ class SublimePrint(sublime_plugin.WindowCommand):
         if not (print_line_numbers and settings.get("print_line_numbers")):
             options.pop("line-numbers")
 
-        options_list = ["--{}={}".format(k, v) for k, v in options.items() if v != ""]
-        options_list += ["--{}".format(k) for k, v in options.items() if v == ""]
+        options_list = ["--{0}={1}".format(k, v) for k, v in options.items() if v != ""]
+        options_list += ["--{0}".format(k) for k, v in options.items() if v == ""]
 
         printer = self.get_printer()
         if printer is not None:
-            options_list.append("--printer={}".format(printer))
+            options_list.append("--printer={0}".format(printer))
 
         return [print_cmd] + options_list
 
