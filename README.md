@@ -47,6 +47,11 @@ If you instead always want to print on the default printer, you can set
 *cache_printer_names* to false in the user configuration file. Doing that will
 cause the printer list to always be generated.
 
+You may override the *used_printer* value at print time by setting the option
+*prompt_printer* to be true in your user settings file. When this option is
+true, you will be prompted to choose which printer to print to on each new
+print job.
+
 ## Install enscript
 
 Check whether enscript is installed already:
@@ -113,3 +118,8 @@ not verified that this works, though. If someone wants to try, please do so.
 15 Jul 2013
 : Added *cache_printer_names* setting for those who always want to use
   the default printer.
+
+21 Sep 2013
+: Added *prompt_printer* setting for those who wish to choose the printer
+  on every use.
+  

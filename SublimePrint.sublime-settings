@@ -11,6 +11,9 @@
     // Cache printer names and default
     "cache_printer_names": true,
 
+    // Should the user be propmted to choose which printer to print to?
+    "prompt_printer": false,
+
     // Direct command line options for 'enscript'
     "options":
     {

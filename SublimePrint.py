@@ -100,9 +100,9 @@ class SublimePrint(sublime_plugin.WindowCommand):
         options_list = ["--{0}={1}".format(k, v) for k, v in options.items() if v != ""]
         options_list += ["--{0}".format(k) for k, v in options.items() if v == ""]
 
-        printer = self.get_printer()
-        if printer is not None:
-            options_list.append("--printer={0}".format(printer))
+        # printer = self.get_printer()
+        # if printer is not None:
+        #     options_list.append("--printer={0}".format(printer))
 
         return [print_cmd] + options_list
 
@@ -123,13 +123,22 @@ class SublimePrint(sublime_plugin.WindowCommand):
         if ret:
             raise EnvironmentError((cmd, ret, p.stdout.read()))
 
+    def get_all_printers(self):
+        printer_idx = 1
+        printers = []
+        settings = load_settings()
+        while settings.has("printer_{0}".format(printer_idx)):
+            printers.append(settings.get("printer_{0}".format(printer_idx)))
+            printer_idx += 1
 
-class PrintFileCommand(SublimePrint):
-    '''
-    Print the current file. This command assumes the file has been saved to
-    disk. It will abort if not.
-    '''
-    def run(self):
+        return printers
+
+    def print_file_callback(self, name_index):
+        if name_index == -1: return
+
+        printer_names = self.get_all_printers()
+        printer = printer_names[name_index]
+
         file_path = self.window.active_view().file_name()
         if self.window.active_view().is_dirty():
             sublime.message_dialog("File has unsaved changes.")
@@ -140,16 +149,16 @@ class PrintFileCommand(SublimePrint):
 
         cmd = self.printer_command()
         if cmd is not None:
+            cmd.append("--printer={0}".format(printer))
             self.send_file_to_printer(cmd, file_path)
 
+    def print_selection_callback(self, name_index):
+        if name_index == -1: return
 
-class PrintSelectionCommand(SublimePrint):
-    '''
-    This command prints the current selection. If there are multiple
-    selections, they will all be printed with a separator line between them.
-    '''
-    def run(self):
         settings = load_settings()
+        printer_names = self.get_all_printers()
+        printer = printer_names[name_index]
+
         view = self.window.active_view()
         if view.file_name():
             title = os.path.basename(view.file_name())
@@ -168,7 +177,48 @@ class PrintSelectionCommand(SublimePrint):
 
         cmd = self.printer_command(title, False)
         if cmd is not None:
+            cmd.append("--printer={0}".format(printer))
             self.send_text_to_printer(cmd, text)
+
+
+    def print_clipboard_callback(self, name_index):
+        if name_index == -1: return
+
+        printer_names = self.get_all_printers()
+        printer = printer_names[name_index]
+
+        cmd = self.printer_command("* Clipboard *", False)
+        if cmd is not None:
+            cmd.append("--printer={0}".format(printer))
+            self.send_text_to_printer(cmd, sublime.get_clipboard())
+
+
+class PrintFileCommand(SublimePrint):
+    '''
+    Print the current file. This command assumes the file has been saved to
+    disk. It will abort if not.
+    '''
+    def run(self):
+        settings = load_settings()
+        printer_names = self.get_all_printers()
+        if settings.get("prompt_printer") == True:
+            self.window.show_quick_panel(printer_names, self.print_file_callback)
+        else:
+            self.print_file_callback(printer_names.index(self.get_printer()))
+
+
+class PrintSelectionCommand(SublimePrint):
+    '''
+    This command prints the current selection. If there are multiple
+    selections, they will all be printed with a separator line between them.
+    '''
+    def run(self):
+        settings = load_settings()
+        printer_names = self.get_all_printers()
+        if settings.get("prompt_printer") == True:
+            self.window.show_quick_panel(printer_names, self.print_selection_callback)
+        else:
+            self.print_selection_callback(printer_names.index(self.get_printer()))
 
 
 class PrintClipboardCommand(SublimePrint):
@@ -176,9 +226,12 @@ class PrintClipboardCommand(SublimePrint):
     This command prints the content of the clipboard.
     '''
     def run(self):
-        cmd = self.printer_command("* Clipboard *", False)
-        if cmd is not None:
-            self.send_text_to_printer(cmd, sublime.get_clipboard())
+        settings = load_settings()
+        printer_names = self.get_all_printers()
+        if settings.get("prompt_printer") == True:
+            self.window.show_quick_panel(printer_names, self.print_clipboard_callback)
+        else:
+            self.print_clipboard_callback(printer_names.index(self.get_printer()))
 
     def is_enabled(self):
         return sublime.get_clipboard() != ""
