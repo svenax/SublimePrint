@@ -24,7 +24,7 @@
                             {
                                 "command": "open_file", "args":
                                 {
-                                    "file": "${packages}/SublimePrint/README.md"
+                                    "file": "${packages}/Simple Print Function/README.md"
                                 },
                                 "caption": "README"
                             },
@@ -32,7 +32,7 @@
                             {
                                 "command": "open_file", "args":
                                 {
-                                    "file": "${packages}/SublimePrint/SublimePrint.sublime-settings"
+                                    "file": "${packages}/Simple Print Function/SublimePrint.sublime-settings"
                                 },
                                 "caption": "Settings – Default"
                             },
