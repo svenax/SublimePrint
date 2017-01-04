@@ -6,7 +6,8 @@ First make sure you have enscript installed. For most Linux distros and for
 OS X before 10.8 this is done by default. There are builds for Windows too,
 but I'm not sure how well those work.
 
-The plugin provides three different print commands:
+The plugin adds three different print commands to the File menu and to the
+context menu for the editor view:
 1. Print Entire File. Only works for saved files.
 2. Print Selection. Works correctly with multiple selections.
 3. Print Clipboard.
