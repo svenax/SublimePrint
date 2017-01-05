@@ -14,6 +14,18 @@ instead, with suitable options.
 **Note:** The code in `SublimePrint.py` actually depends on enscript a bit
 at the moment. I may clean that up in case there are requests for it.
 
+# Usage
+
+Choose "Print" from the File menu, or...
+
+#### Windows
+    ctrl + alt + p            print_file
+    ctrl + shift + alt + p    print_selection
+
+#### Mac
+    ⌘ + alt + p               print_file
+    ⌘ + shift + alt + p       print_selection
+
 ## Configuration
 
 Add whatever options you need in the settings file. Note that options without
