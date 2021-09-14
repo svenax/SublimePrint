@@ -83,6 +83,24 @@ class SublimePrint(sublime_plugin.WindowCommand):
 
         return used_printer
 
+
+    def get_lang(self):
+        '''
+        Return the syntax (language) of the active window.
+        '''
+        syntaxPackage = sublime.active_window().active_view().settings().get('syntax')
+        #print(syntaxPackage)
+        if syntaxPackage.count('/') == 3 and syntaxPackage.count('/Support/') == 1:
+            (pkg, lang, support, tmLang) = syntaxPackage.split('/')
+        else:
+            (pkg, lang, tmLang) = syntaxPackage.split('/')
+        
+        #print(lang)
+        lang = lang.lower()
+
+        return lang
+
+
     def printer_command(self, title=None, print_line_numbers=True):
         '''
         Return the array of command line options to pass to the subprocess.
@@ -96,6 +114,13 @@ class SublimePrint(sublime_plugin.WindowCommand):
             options[title_option] = title
         if not (print_line_numbers and settings.get("print_line_numbers")):
             options.pop("line-numbers")
+
+        if options["highlight"] == True:
+            lang = self.get_lang()
+            options["highlight"] = lang
+            if lang == 'text':
+                options.pop("highlight")
+            # print(options)
 
         options_list = ["--{0}={1}".format(k, v) for k, v in options.items() if v != ""]
         options_list += ["--{0}".format(k) for k, v in options.items() if v == ""]
