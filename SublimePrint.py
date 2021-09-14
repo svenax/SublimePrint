@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 import os
 import subprocess
+import platform
 
 
 def load_settings():
@@ -22,7 +23,8 @@ class SublimePrint(sublime_plugin.WindowCommand):
 
     BIN_PATHS = [
         "/usr/bin",
-        "/usr/local/bin"
+        "/usr/local/bin",
+        "C:\\cygwin64\\bin"
     ]
 
     def is_enabled(self):
@@ -36,6 +38,9 @@ class SublimePrint(sublime_plugin.WindowCommand):
         If the given command exists in one of the BIN_PATHS folders, return
         the full path, else exit.
         '''
+        if platform.system() == 'Windows':
+            cmd += '.exe'
+
         if os.path.isabs(cmd) and not os.path.isfile(cmd):
             cmd_path = None
         else:
@@ -59,25 +64,67 @@ class SublimePrint(sublime_plugin.WindowCommand):
         used_printer = settings.get("used_printer", None)
         cache_printer_names = settings.get("cache_printer_names", True)
         if used_printer is None or not cache_printer_names:
-            lpstat_cmd = self.find_command("lpstat")
-            if lpstat_cmd is None: return None
-            # Get default printer
-            p = open_pipe([lpstat_cmd, "-d"])
-            if p.wait() == 0:
-                try:
-                    used_printer = p.stdout.read().split(":")[1].strip()
-                    settings.set("used_printer", used_printer)
-                except:
-                    # No default printer set
-                    pass
-            # Get all printers
-            p = open_pipe([lpstat_cmd, "-a"])
-            if p.wait() == 0:
-                printer_cnt = 0
-                for line in p.stdout:
-                    printer_cnt += 1
-                    printer_name = "printer_{0}".format(printer_cnt)
-                    settings.set(printer_name, line.split()[0])
+            print('platform =')
+            print(platform.system())
+            if platform.system() == 'Windows':
+
+                
+                prnScript = 'cscript C:\Windows\System32\Printing_Admin_Scripts\en-US\prnmngr.vbs' 
+                getDefault = '-g'
+                listAll = '-l'
+
+                getDefPrnCmd = prnScript + ' ' + getDefault
+                listAllPrnCmd = prnScript + ' ' + listAll
+
+                # Get all printers
+                p = open_pipe(listAllPrnCmd)
+                if p.wait() == 0:
+                    lookFor = 'Printer name '
+                    printer_cnt = 0
+                    for line in p.stdout:
+                        if line.startswith(lookFor):
+                            printer_cnt += 1
+                            name = line.replace(lookFor,'').strip()
+                            printer_name = "printer_{0}".format(printer_cnt)
+                            settings.set(printer_name, name)
+                            print('{0}   {1}', printer_cnt, name)
+
+                    print('after line loop')
+                    if printer_cnt == 0: return None
+
+                # Get default printer
+                p = open_pipe(getDefPrnCmd)
+                if p.wait() == 0:                
+                    lookFor = 'The default printer is '
+                    for line in p.stdout:
+                        if line.startswith(lookFor):
+                            print(line)
+                            default_printer = line.replace(lookFor,'').strip()
+                            print(name)
+                            settings.set("used_printer", default_printer)
+
+            else:
+                # Not Windows
+                lpstat_cmd = self.find_command("lpstat")
+                if lpstat_cmd is None: return None
+                # Get default printer
+                p = open_pipe([lpstat_cmd, "-d"])
+                if p.wait() == 0:
+                    try:
+                        used_printer = p.stdout.read().split(":")[1].strip()
+                        settings.set("used_printer", used_printer)
+                    except:
+                        # No default printer set
+                        pass
+                # Get all printers
+                p = open_pipe([lpstat_cmd, "-a"])
+                if p.wait() == 0:
+                    printer_cnt = 0
+                    for line in p.stdout:
+                        printer_cnt += 1
+                        printer_name = "printer_{0}".format(printer_cnt)
+                        settings.set(printer_name, line.split()[0])
+                        
             # Save the updated printer information
             save_settings()
 
@@ -100,6 +147,8 @@ class SublimePrint(sublime_plugin.WindowCommand):
         options_list = ["--{0}={1}".format(k, v) for k, v in options.items() if v != ""]
         options_list += ["--{0}".format(k) for k, v in options.items() if v == ""]
 
+        # print(options_list)
+
         # printer = self.get_printer()
         # if printer is not None:
         #     options_list.append("--printer={0}".format(printer))
@@ -113,7 +162,24 @@ class SublimePrint(sublime_plugin.WindowCommand):
         ret = p.wait()
 
         if ret:
-            raise EnvironmentError((cmd, ret, p.stdout.read()))
+            msg = p.stdout.read()
+
+            # Look for the lpr not found error and recommend a solution
+            if 'lpr: command not found' in msg:
+                lprcmd = self.find_command('lpr')
+                settings = load_settings()
+
+                lprpathmsg = '''
+                lpr: command not found by {0}
+                Adding the folder containing lpr to the system path
+                may resolve this problem.
+                
+                lpr is located at {1}
+                '''
+                lprpathmsg = lprpathmsg.format(settings.get("command"), lprcmd)
+                sublime.error_message(lprpathmsg)
+
+            raise EnvironmentError((cmd, ret, msg))
 
     def send_text_to_printer(self, cmd, text):
         p = open_pipe(cmd, stdin=subprocess.PIPE)
@@ -149,7 +215,15 @@ class SublimePrint(sublime_plugin.WindowCommand):
 
         cmd = self.printer_command()
         if cmd is not None:
-            cmd.append("--printer={0}".format(printer))
+            if platform.system() == 'Windows' and ' ' in printer:
+                printerOpt = '--printer="{0}"'
+            else:
+                printerOpt = '--printer={0}'
+
+            cmd.append(printerOpt.format(printer))
+
+            print(cmd)
+            print(file_path)
             self.send_file_to_printer(cmd, file_path)
 
     def print_selection_callback(self, name_index):
